@@ -5,8 +5,10 @@
 
 ### 1.1 省份、城市选择
 
+#### 省份信息
+
 * router
-  * / spots
+  * /provinces
 
 * request
 ```
@@ -16,18 +18,31 @@
 ```js
 [{
     "province": String,
-    "total": Number,
-    "citys": [{
-        "name": String,
-        "isShown": Boolean
-    }, ...]
-}, ...]
+    "citiesNum": Number,
+},
+...]
 ```
+#### 城市信息
+* router
+  * /cities/{provinceName}
+  
+* request
+  * 
+  
+* response
+```js
+[{
+    "city": String,
+    "albumNum": Number,
+},
+...]
+```
+
 
 ### 1.2 浏览相册
 
 * router
-  * / spots / cityName
+  * /spots/{cityName}
 
 * request
 ```
@@ -47,7 +62,27 @@
 ### 1.3 浏览图片
 
 * router
-  * / spots / cityName
+  * / spots /{albumId}
+
+* request
+```
+```
+
+* response
+```js
+[
+    {"photoId":Number},
+    {"photoId":Number},
+    ...
+]
+```
+* 作用\
+获取一album里所有照片的id按顺序形成数组
+
+### 1.4 上一张，下一张
+
+* router
+  * / spots /{albumId}/{photoId}
 
 * request
 ```
@@ -56,33 +91,21 @@
 * response
 ```js
 {
-    "picId": Number,
-    "userName": String,
-    "picName": String,
-    "picDescription": String,
-    "url": String,
-    "isLike": Boolean,
-    "likeNum": Number,
-    "date": UNIX
+    "photoId":Number,
+    "username":String,
+    "photoName":String,
+    "photoDescription":String,
+    "url":String,
+    "isLike":Boolean,
+    "likeNum":Number,
+    "time":Number
 }
 ```
-
-### 1.4 上一张，下一张
-
-* router
-  * / spots / cityName
-
-* request
-```
-```
-
-* response
-  * 同 1.3-response
 
 ### 1.5 点赞
 
 * router
-  * / spots / cityName
+  * /like/{albumId}/{photoId}
 
 * request
 ```
@@ -90,12 +113,15 @@
 
 * response
 ```
+{
+    "isSuccessful":Boolean
+}
 ```
 
-### 1.6 评论
+### 1.6 获取评论
 
 * router
-  * / spots / cityName
+  * /comment/{photoId}
 
 * request
 
@@ -111,23 +137,83 @@
 ## 高校景观
 
 ### 2.1 省份选择
-
+#### 省份选择
 * router
-  * / collage
+  * /provinces/collage
 
 * request
 
 * response
+```js
+[{
+    "province": String,
+    "collegesNum": Number,
+},
+...]
+```
 
-### 2.2 浏览相册
+#### 高校选择
 
 * router
-  * / collage
+  * /college/{provinceName}
+  
+* request
+  * 
+  
+* response
+```js
+[{
+    "college": String,
+    "albumId": Number,
+    "name": String,
+    "visited": Number,
+    "likeNum": Number,
+    "url": String
+},
+...]
+```
+
+
+### 2.2 浏览图片
+
+* router
+  * /spots/{albumId}
 
 * request
+```
+```
 
 * response
-  * the same as 1.2-response
+```js
+[
+    {"photoId":Number},
+    {"photoId":Number},
+    ...
+]
+```
+
+### 2.3 上一张，下一张
+
+* router
+  * / spots /{albumId}/{photoId}
+
+* request
+```
+```
+
+* response
+```js
+{
+    "photoId":Number,
+    "username":String,
+    "photoName":String,
+    "photoDescription":String,
+    "url":String,
+    "isLike":Boolean,
+    "likeNum":Number,
+    "time":Number
+}
+```
 
 ## 最新推荐
 
@@ -148,19 +234,20 @@
 ### 4.1 登录状态判断
 
 * router
-  * / user
+  * /user
 
 * request
 
 * response
 ```js
 {
-    "state": Boolean
+    "state":Boolean,
+    "username": String
 }
 ```
 
 ### 4.2 未登录，请扫玛登录
-
+???
 * response
 ```js
 {
@@ -175,7 +262,7 @@
 ### 4.4 退出
 
 * router
-  * / logout
+  * /logout
 
 ### 4.5 我的作品
 
@@ -187,8 +274,10 @@
 [{
     "date": UNIX,
     "url": String,
-    "picId": Number,
-    "albumId": Number
+    "photoId": Number,
+    "photoName":String,
+    "albumId": Number,
+    "albumName":String
 }, ...]
 ```
 
@@ -196,11 +285,20 @@
 
 
 ### 4.6 我的作品-上传
-
-
+返回二维码，及token
 ### 4.7 我的收藏
 
 * router
-  * / user / favorite
+  * /user/favorite/{userId}
 
 * response
+```js
+[{
+    "date": UNIX,
+    "url": String,
+    "photoId": Number,
+    "photoName":String,
+    "albumId": Number,
+    "albumName":String
+}, ...]
+```
