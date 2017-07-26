@@ -8,7 +8,7 @@
 #### 省份信息
 
 * router
-  * /provinces
+  * /provinces/cities
 
 * request
 ```
@@ -24,11 +24,11 @@
 ```
 #### 城市信息
 * router
-  * /cities/{provinceName}
-  
+  * /provinces/cities/{provinceName}
+
 * request
-  * 
-  
+  *
+
 * response
 ```js
 [{
@@ -42,7 +42,7 @@
 ### 1.2 浏览相册
 
 * router
-  * /spots/{cityName}
+  * /provinces/cities/{provinceName}/{cityName}/spots
 
 * request
 ```
@@ -62,27 +62,7 @@
 ### 1.3 浏览图片
 
 * router
-  * / spots /{albumId}
-
-* request
-```
-```
-
-* response
-```js
-[
-    {"photoId":Number},
-    {"photoId":Number},
-    ...
-]
-```
-* 作用\
-获取一album里所有照片的id按顺序形成数组
-
-### 1.4 上一张，下一张
-
-* router
-  * / spots /{albumId}/{photoId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}
 
 * request
 ```
@@ -99,16 +79,37 @@
     "isLike":Boolean,
     "likeNum":Number,
     "time":Number
+    "isLast": Boolean
 }
 ```
+* 作用\
+获取一album里所有照片的id按顺序形成数组
+
+### 1.4 上一张，下一张
+
+* router
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
+
+* request
+```
+```
+
+* response
+  * 同 1.3-response
+
+* 上一张下一张通过photoId加一减一实现
 
 ### 1.5 点赞
 
 * router
-  * /like/{albumId}/{photoId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
 
 * request
-```
+method: GET
+```js
+{
+	"like": Boolean
+}
 ```
 
 * response
@@ -121,7 +122,7 @@
 ### 1.6 获取评论
 
 * router
-  * /comment/{photoId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{photoId}/comment
 
 * request
 
@@ -155,11 +156,11 @@
 #### 高校选择
 
 * router
-  * /college/{provinceName}
-  
+  * /provinces/college/{provinceName}
+
 * request
-  * 
-  
+  *
+
 * response
 ```js
 [{
@@ -177,57 +178,35 @@
 ### 2.2 浏览图片
 
 * router
-  * /spots/{albumId}
+  * /provinces/college/{provinceName}/{albumId}/{photoId}
+  * 这里photoId默认值为1
+  * 前端自己判断是否能点击上一张下一张
 
 * request
 ```
 ```
 
 * response
-```js
-[
-    {"photoId":Number},
-    {"photoId":Number},
-    ...
-]
-```
+  * 同 1.3-response
 
-### 2.3 上一张，下一张
-
-* router
-  * / spots /{albumId}/{photoId}
-
-* request
-```
-```
-
-* response
-```js
-{
-    "photoId":Number,
-    "username":String,
-    "photoName":String,
-    "photoDescription":String,
-    "url":String,
-    "isLike":Boolean,
-    "likeNum":Number,
-    "time":Number
-}
-```
 
 ## 最新推荐
 
 ### 3.1 轮播图
 
 * router
-  * / lastest
+  * /lastest
 
 * response
+  * 同 1.2-response
 
 ### 3.2 推荐相册
 
 * router
-  * / lastest
+  * /lastest
+
+* response
+  * 同 1.3-response
 
 ## 用户管理
 
@@ -242,7 +221,7 @@
 ```js
 {
     "state":Boolean,
-    "username": String
+    "username": String //state = 1 时才返回
 }
 ```
 
@@ -255,9 +234,11 @@
 }
 ```
 
+* 要有过期时间
+
 ### 4.3 已经登录
 
-* 
+* 跳到 4.1 重新验证
 
 ### 4.4 退出
 
@@ -267,7 +248,7 @@
 ### 4.5 我的作品
 
 * router
-  * / user / works
+  * /user/works/{userName}
 
 * response
 ```js
@@ -283,9 +264,13 @@
 
 ### 4.5 我的作品-删除
 
+  * /user/works/{userName}/delete/{albumId}/{photoName}
 
 ### 4.6 我的作品-上传
-返回二维码，及token
+
+* response
+  * 返回二维码，及token、链接
+
 ### 4.7 我的收藏
 
 * router
