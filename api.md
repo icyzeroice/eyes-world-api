@@ -17,10 +17,15 @@
 * response
 ```js
 [{
-    "province": String,
-    "citiesNum": Number,
+    "provinceName": String,
+    "spotNum": Number,
+	"collegeNum": Number
 },
 ...]
+```
+例子：
+```js
+[{"provinceName":"GD","spotNum":1,"collegeNum":1},{"provinceName":"GX","spotNum":0,"collegeNum":0}]
 ```
 #### 城市信息
 * router
@@ -52,9 +57,9 @@
 ```js
 [{
     "albumId": Number,
-    "name": String,
-    "visited": Number,
-    "likeNum": Number,
+    "albumName": String,
+    "visitAmount": Number,
+    "likeAmount": Number,
     "url": String
 }, ...]
 ```
@@ -62,7 +67,7 @@
 ### 1.3 浏览图片
 
 * router
-  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
 
 * request
 ```
@@ -76,10 +81,10 @@
     "photoName":String,
     "photoDescription":String,
     "url":String,
-    "isLike":Boolean,
-    "likeNum":Number,
-    "time":Number
-    "isLast": Boolean
+    "like":Boolean,
+    "likeAmount":Number,
+    "createTime":Number
+    "last": Boolean
 }
 ```
 * 作用\
@@ -122,7 +127,7 @@ method: GET
 ### 1.6 获取评论
 
 * router
-  * /provinces/cities/{provinceName}/{cityName}/spots/{photoId}/comment
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}/comment
 
 * request
 
@@ -147,8 +152,9 @@ method: GET
 * response
 ```js
 [{
-    "province": String,
-    "collegesNum": Number,
+	"provinceName": String,
+    "spotNum": Number,
+	"collegeNum": Number
 },
 ...]
 ```
@@ -216,7 +222,8 @@ method: GET
   * /user
 
 * request
-
+  * cookie：
+  
 * response
 ```js
 {
@@ -286,4 +293,21 @@ method: GET
     "albumId": Number,
     "albumName":String
 }, ...]
+```
+
+
+
+## 删除图片
+
+* router
+  * /upload/{provinceName}/{cityName}/{username}  POST
+
+* request
+
+  * ?photoName=...&url=...
+
+
+* respond
+```js
+  * {respond:Boolean}
 ```

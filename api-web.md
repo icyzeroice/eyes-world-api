@@ -40,46 +40,89 @@
 ## 登录
 
 ----
+### 电视获取二维码url及marker
+
 * router
-  * /signin/{token}
-----
+  * /login/tv/getqr  GET
+  
+* request
+
+
+* respond
+```js
+    {
+        "qrPath":String,
+        "marker":String
+    }
+```
+
+---
+### 手机发送marker
+
+* router
+  * /login/phone/sendmarker  POST
+
+* request
+  * ?marker=...
+  
+* response
+  * 200
+
+---
+###  电视登录
+
+* router
+  * /login/tv/login
+  
+* request
+  * ?marker=...
+  
+* response
+  *  200
+
+---
+
+## 景点图片评论
+
+* router
+  * /comment/{provinceName}/{cityName}/{username}/{albumId}/{photoId}  POST
 
 * request
 ```js
-{
-    "userName": String,
-    "password": String
-}
+  * ?photoComment=.....
 ```
 
 * respond
 ```js
-
+  * {respond:Boolean}
 ```
 
-## 评论
+## 高校图片评论
 
 * router
-  * /comment
+  * /comment/{provinceName}/{username}/{albumId}/{photoId}  POST
 
 * request
-```js
-```
+
+  *  ?photoComment=.....
+
 
 * respond
 ```js
+  * {respond:Boolean}
 ```
-
 
 ## 上传
 
 * router
-  * /upload
+  * /upload/{provinceName}/{cityName}/{username}  POST
 
 * request
-```js
-```
+
+  * ?albumName&photoName=...&photoDesc=...
+
 
 * respond
 ```js
+  * {respond:Boolean}
 ```
