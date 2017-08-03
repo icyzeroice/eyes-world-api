@@ -36,7 +36,8 @@
     "nameUsed": Boolean
 }
 ```
-
+true---可以使用
+false---不可用使用，已经重名
 ## 登录
 
 ----
@@ -84,8 +85,10 @@
 
 ## 景点图片评论
 
+### 添加图片评论
+
 * router
-  * /comment/{provinceName}/{cityName}/{username}/{albumId}/{photoId}  POST
+  * /spotsComment/{provinceName}/{cityName}/{albumId}/{photoId}  POST
 
 * request
 ```js
@@ -97,10 +100,35 @@
   * {respond:Boolean}
 ```
 
-## 高校图片评论
+### 是否可删除图片评论（用户自己发的评论才可以删除）
 
 * router
-  * /comment/{provinceName}/{username}/{albumId}/{photoId}  POST
+  * /spotsComment/{provinceName}/{cityName}/{albumId}/{photoId}/{commentId}/deletable
+  
+* respond
+```js
+  * {respond:Boolean} 
+```
+true---可删除
+false---不可删除
+
+### 删除图片评论
+* router
+  * /spotsComment/{provinceName}/{cityName}/{albumId}/{photoId}/{commentId}/delete
+  
+* respond
+```js
+  * {respond:Boolean}
+```
+
+
+
+## 高校图片评论
+
+### 添加图片评论
+
+* router
+  * /collegeComment/{provinceName}/{albumId}/{photoId}  POST
 
 * request
 
@@ -111,18 +139,60 @@
 ```js
   * {respond:Boolean}
 ```
+### 是否可删除图片评论（用户自己发的评论才可以删除）
+
+* router
+  * /collegeComment/{provinceName}/{albumId}/{photoId}/{commentId}/deletable
+  
+* respond
+```js
+  * {respond:Boolean} 
+```
+true---可删除
+false---不可删除
+
+
+### 删除图片评论
+
+* router
+  * /collegeComment/{provinceName}/{albumId}/{photoId}/{commentId}/delete  
+  
+* respond
+```js
+  * {respond:Boolean}
+```
+
 
 ## 上传
+
+### 景点图片上传
 
 * router
   * /upload/{provinceName}/{cityName}/{username}  POST
 
 * request
 
-  * ?albumName&photoName=...&photoDesc=...
+  * ?albumName=...&photoName=...&photoDesc=...
 
 
 * respond
 ```js
   * {respond:Boolean}
 ```
+### 高校图片上传
+
+* router
+  * /upload/{provinceName}/{username}  POST
+
+* request
+
+  * ?albumName=...&photoName=...&photoDesc=...
+
+
+* respond
+```js
+  * {respond:Boolean}
+```
+
+
+

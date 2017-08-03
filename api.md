@@ -66,8 +66,12 @@
 
 ### 1.3 浏览图片
 
+albumId，photoId从0开始计数
+
 * router
   * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
+
+* 第一次请求图片
 
 * request
 ```
@@ -87,6 +91,18 @@
     "last": Boolean
 }
 ```
+
+* 第二次请求图片字节流
+
+* router
+  * /upload/{provinceName}/{cityName}/{username}/{photoName}
+
+* request
+
+* respose
+字节流
+
+
 * 作用\
 获取一album里所有照片的id按顺序形成数组
 
@@ -104,27 +120,26 @@
 
 * 上一张下一张通过photoId加一减一实现
 
-### 1.5 点赞
+### 1.5 景点图片点赞
 
 * router
-  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}/like
 
 * request
-method: GET
-```js
-{
-	"like": Boolean
-}
-```
+
+String字段：true或者false
 
 * response
 ```
 {
-    "isSuccessful":Boolean
+    "state":Boolean
 }
 ```
+//true---点赞（变成已经点赞的状态）  false----取消赞(变成没有点赞的状态)
 
-### 1.6 获取评论
+
+
+### 1.6 获取景点评论
 
 * router
   * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}/comment
@@ -134,6 +149,7 @@ method: GET
 * response
 ```js
 [{
+	"commentId":Integer,
     "userName": String,
     "comment": String,
     "date": UNIX
@@ -194,6 +210,40 @@ method: GET
 
 * response
   * 同 1.3-response
+
+
+### 2.3 高校图片点赞
+
+* router
+  * /provinces/college/{provinceName}/{albumId}/{photoId}/like
+
+* request
+
+String字段：true或者false
+
+* response
+```
+{
+    "state":Boolean
+}
+```
+
+### 2.4 获取高校评论
+
+* router
+  * /provinces/college/{provinceName}/{albumId}/{photoId}/comment
+
+* request
+
+* response
+```js
+[{
+	"commentId":Integer,
+    "userName": String,
+    "comment": String,
+    "date": UNIX
+}, ...]
+```
 
 
 ## 最新推荐
