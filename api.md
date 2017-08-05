@@ -17,10 +17,15 @@
 * response
 ```js
 [{
-    "province": String,
-    "citiesNum": Number,
+    "provinceName": String,
+    "spotNum": Number,
+	"collegeNum": Number
 },
 ...]
+```
+例子：
+```js
+[{"provinceName":"广东","spotNum":1,"collegeNum":1},{"provinceName":"广西","spotNum":0,"collegeNum":0}]
 ```
 #### 城市信息
 * router
@@ -52,17 +57,24 @@
 ```js
 [{
     "albumId": Number,
-    "name": String,
-    "visited": Number,
-    "likeNum": Number,
+    "albumName": String,
+    "visitAmount": Number,
+    "likeAmount": Number,
     "url": String
 }, ...]
 ```
 
 ### 1.3 浏览图片
 
+albumId，photoId从0开始计数
+
 * router
-  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
+  * /provinces/cities/广东/佛山/spots/0/0     第一个相册的第一张图片
+  * /provinces/cities/广东/佛山/spots/0/1     第一个相册的第二张图片
+
+
+* 第一次请求图片
 
 * request
 ```
@@ -76,14 +88,53 @@
     "photoName":String,
     "photoDescription":String,
     "url":String,
-    "isLike":Boolean,
-    "likeNum":Number,
-    "time":Number
-    "isLast": Boolean
+    "like":Boolean,
+    "likeAmount":Number,
+    "createTime":Number
+    "last": Boolean
 }
 ```
-* 作用\
+
+
+like:true---还没点赞
+
+like:false---已经点赞
+
+last:true---是相册的最后一张照片
+
+last:false---不是相册的最后一张照片
+
+
+```js
+例子
+{"photoId":6,
+"username":"Mike",
+"photoName":"abcd--1234567",
+"photoDescription":"666",
+"url":"/upload/广东/潮州/Mike/abcd%%1501641406355",
+"like":true,
+"likeAmount":1,
+"createTime":0,
+"last":false}
+```
+
+* 第二次请求图片字节流
+
+* router
+  * /upload/{provinceName}/{cityName}/{username}/{photoName}
+  * /upload/广东/潮州/Mike/abcd--1234567
+
+* request
+
+* respose
+字节流
+
+
+* 作用
+
+
 获取一album里所有照片的id按顺序形成数组
+
 
 ### 1.4 上一张，下一张
 
@@ -99,40 +150,46 @@
 
 * 上一张下一张通过photoId加一减一实现
 
-### 1.5 点赞
+### 1.5 景点图片点赞
 
 * router
-  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}/like
 
 * request
-method: GET
-```js
-{
-	"like": Boolean
-}
-```
+
 
 * response
 ```
 {
-    "isSuccessful":Boolean
+    "state":Boolean
 }
 ```
 
-### 1.6 获取评论
+true---显示已点赞
+false---显示未点赞
+
+### 1.6 获取景点评论
 
 * router
-  * /provinces/cities/{provinceName}/{cityName}/spots/{photoId}/comment
+  * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}/comment
 
 * request
 
 * response
 ```js
 [{
+	"commentId":Integer,
     "userName": String,
     "comment": String,
-    "date": UNIX
+    "modificationTime": Number
 }, ...]
+```
+
+```js
+[{"commentId":8,
+"username":"Mike",
+"content":"123121414",
+"modificationTime":2017}]
 ```
 
 ## 高校景观
@@ -147,8 +204,9 @@ method: GET
 * response
 ```js
 [{
-    "province": String,
-    "collegesNum": Number,
+	"provinceName": String,
+    "spotNum": Number,
+	"collegeNum": Number
 },
 ...]
 ```
@@ -175,11 +233,13 @@ method: GET
 ```
 
 
-### 2.2 浏览图片
+### 2.2 浏览高校图片
 
 * router
   * /provinces/college/{provinceName}/{albumId}/{photoId}
-  * 这里photoId默认值为1
+  * /provinces/college/广东/0/0     第一个相册的第一张图片
+  * /provinces/college/广东/0/1    第一个相册的第二张图片
+  * 这里photoId默认值为0
   * 前端自己判断是否能点击上一张下一张
 
 * request
@@ -188,6 +248,52 @@ method: GET
 
 * response
   * 同 1.3-response
+
+
+### 2.3 高校图片点赞
+
+* router
+  * /provinces/college/{provinceName}/{albumId}/{photoId}/like
+
+* request
+
+
+* response
+```
+{
+    "state":Boolean
+}
+```
+true---显示已点赞
+false---显示未点赞
+
+### 2.4 获取高校评论
+
+* router
+  * /provinces/college/{provinceName}/{albumId}/{photoId}/comment
+
+* request
+
+* response
+```js
+[{
+	"commentId":Integer,
+    "userName": String,
+    "comment": String,
+    "modificationTime": Number
+}, ...]
+```
+```js
+例子：
+[{"commentId":9,
+"username":"Mike",
+"content":"评论内容1",
+"modificationTime":2017},
+{"commentId":10,
+"username":"Liky",
+"content":"评论内容2",
+"modificationTime":2017}]
+```
 
 
 ## 最新推荐
@@ -216,7 +322,8 @@ method: GET
   * /user
 
 * request
-
+  * cookie：
+  
 * response
 ```js
 {
@@ -286,4 +393,21 @@ method: GET
     "albumId": Number,
     "albumName":String
 }, ...]
+```
+
+
+
+## 删除图片
+
+* router
+  * /upload/{provinceName}/{cityName}/{username}  POST
+
+* request
+
+  * ?photoName=...&url=...
+
+
+* respond
+```js
+  * {respond:Boolean}
 ```
