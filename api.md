@@ -25,7 +25,7 @@
 ```
 例子：
 ```js
-[{"provinceName":"GD","spotNum":1,"collegeNum":1},{"provinceName":"GX","spotNum":0,"collegeNum":0}]
+[{"provinceName":"广东","spotNum":1,"collegeNum":1},{"provinceName":"广西","spotNum":0,"collegeNum":0}]
 ```
 #### 城市信息
 * router
@@ -70,6 +70,9 @@ albumId，photoId从0开始计数
 
 * router
   * /provinces/cities/{provinceName}/{cityName}/spots/{albumId}/{photoId}
+  * /provinces/cities/广东/佛山/spots/0/0     第一个相册的第一张图片
+  * /provinces/cities/广东/佛山/spots/0/1     第一个相册的第二张图片
+
 
 * 第一次请求图片
 
@@ -92,10 +95,34 @@ albumId，photoId从0开始计数
 }
 ```
 
+
+like:true---还没点赞
+
+like:false---已经点赞
+
+last:true---是相册的最后一张照片
+
+last:false---不是相册的最后一张照片
+
+
+```js
+例子
+{"photoId":6,
+"username":"Mike",
+"photoName":"abcd--1234567",
+"photoDescription":"666",
+"url":"/upload/广东/潮州/Mike/abcd%%1501641406355",
+"like":true,
+"likeAmount":1,
+"createTime":0,
+"last":false}
+```
+
 * 第二次请求图片字节流
 
 * router
   * /upload/{provinceName}/{cityName}/{username}/{photoName}
+  * /upload/广东/潮州/Mike/abcd--1234567
 
 * request
 
@@ -103,8 +130,11 @@ albumId，photoId从0开始计数
 字节流
 
 
-* 作用\
+* 作用
+
+
 获取一album里所有照片的id按顺序形成数组
+
 
 ### 1.4 上一张，下一张
 
@@ -127,7 +157,6 @@ albumId，photoId从0开始计数
 
 * request
 
-String字段：true或者false
 
 * response
 ```
@@ -135,9 +164,9 @@ String字段：true或者false
     "state":Boolean
 }
 ```
-//true---点赞（变成已经点赞的状态）  false----取消赞(变成没有点赞的状态)
 
-
+true---显示已点赞
+false---显示未点赞
 
 ### 1.6 获取景点评论
 
@@ -152,8 +181,15 @@ String字段：true或者false
 	"commentId":Integer,
     "userName": String,
     "comment": String,
-    "date": UNIX
+    "modificationTime": Number
 }, ...]
+```
+
+```js
+[{"commentId":8,
+"username":"Mike",
+"content":"123121414",
+"modificationTime":2017}]
 ```
 
 ## 高校景观
@@ -197,11 +233,13 @@ String字段：true或者false
 ```
 
 
-### 2.2 浏览图片
+### 2.2 浏览高校图片
 
 * router
   * /provinces/college/{provinceName}/{albumId}/{photoId}
-  * 这里photoId默认值为1
+  * /provinces/college/广东/0/0     第一个相册的第一张图片
+  * /provinces/college/广东/0/1    第一个相册的第二张图片
+  * 这里photoId默认值为0
   * 前端自己判断是否能点击上一张下一张
 
 * request
@@ -219,7 +257,6 @@ String字段：true或者false
 
 * request
 
-String字段：true或者false
 
 * response
 ```
@@ -227,6 +264,8 @@ String字段：true或者false
     "state":Boolean
 }
 ```
+true---显示已点赞
+false---显示未点赞
 
 ### 2.4 获取高校评论
 
@@ -241,8 +280,19 @@ String字段：true或者false
 	"commentId":Integer,
     "userName": String,
     "comment": String,
-    "date": UNIX
+    "modificationTime": Number
 }, ...]
+```
+```js
+例子：
+[{"commentId":9,
+"username":"Mike",
+"content":"评论内容1",
+"modificationTime":2017},
+{"commentId":10,
+"username":"Liky",
+"content":"评论内容2",
+"modificationTime":2017}]
 ```
 
 
